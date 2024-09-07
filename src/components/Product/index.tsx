@@ -7,16 +7,16 @@ type Props = {
   name: string;
   done: boolean;
   onRemove: () => void;
-  onPress: () => void;
+  onAdd: () => void;
 };
 
-export const Product = ({ name, done, onRemove, onPress }: Props) => {
+export const ProductCard = ({ name, done, onRemove, onAdd }: Props) => {
   return (
     <View
       style={{ ...styles.container, borderColor: done ? "#D9D9D9" : "#808080" }}
     >
       <View style={styles.wrapper}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onAdd}>
           {done ? (
             <FontAwesome name="check-circle" size={24} color="#7A4A9E" />
           ) : (
@@ -27,7 +27,9 @@ export const Product = ({ name, done, onRemove, onPress }: Props) => {
           {name}
         </Text>
       </View>
-      <FontAwesome name="trash-o" size={24} color="#262626" />
+      <TouchableOpacity onPress={onRemove}>
+        <FontAwesome name="trash-o" size={24} color="#262626" />
+      </TouchableOpacity>
     </View>
   );
 };

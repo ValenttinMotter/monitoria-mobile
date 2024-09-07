@@ -1,10 +1,20 @@
-import { Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { styles } from "./styles";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import shoppingList from "../../assets/shopping_list.png";
+import { ProductCard } from "../../components/Product";
+import { Product } from "../../@types/Product";
+import { useState } from "react";
 
 export const Home = () => {
-  const products = ["Testando", "Testando", "Testando", "Testando"];
+  const [products, setProducts] = useState<Product[]>([]);
 
   return (
     <View style={styles.container}>
@@ -32,15 +42,29 @@ export const Home = () => {
             <Text style={styles.finishedNumber}>0</Text>
           </View>
         </View>
-        <View style={styles.emptyListContainer}>
-          <Image source={shoppingList} />
-          <Text style={styles.strongText}>
-            Você ainda não tem produtos na lista de compras
-          </Text>
-          <Text style={styles.normalText}>
-            Adicione produtos e organize sua lista de compras
-          </Text>
-        </View>
+        <FlatList
+          data={products}
+          keyExtractor={(item) => item.name}
+          renderItem={({ item }) => (
+            <ProductCard
+              name={item.name}
+              done={false}
+              onRemove={() => console.log()}
+              onAdd={() => console.log()}
+            />
+          )}
+          ListEmptyComponent={
+            <View style={styles.emptyListContainer}>
+              <Image source={shoppingList} />
+              <Text style={styles.strongText}>
+                Você ainda não tem produtos na lista de compras
+              </Text>
+              <Text style={styles.normalText}>
+                Adicione produtos e organize sua lista de compras
+              </Text>
+            </View>
+          }
+        />
       </View>
     </View>
   );
