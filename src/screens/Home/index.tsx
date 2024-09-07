@@ -1,4 +1,5 @@
 import {
+  Alert,
   FlatList,
   Image,
   Text,
@@ -15,6 +16,41 @@ import { useState } from "react";
 
 export const Home = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [productName, setProductName] = useState<string>("");
+
+  const handleProductAdd = () => {
+    if (productName.trim() === "") {
+      alert("Por favor, insira um nome para o produto.");
+      return;
+    }
+
+    const isDuplicate = products.some(
+      (product) => product.name === productName
+    );
+    if (isDuplicate) {
+      Alert.alert("Produto existe", "Este produto já está na lista.");
+      return;
+    }
+
+    const newProduct: Product = {
+      name: productName,
+      done: false,
+    };
+    setProducts([...products, newProduct]);
+    setProductName("");
+  };
+
+  const handleProductRemove = (name: string) => {
+    setProducts(products.filter((product) => product.name !== name));
+  };
+
+  const handleProductDone = (name: string) => {
+    setProducts(
+      products.map((product) =>
+        product.name === name ? { ...product, done: !product.done } : product
+      )
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -27,19 +63,24 @@ export const Home = () => {
             style={styles.input}
             placeholder="Adicione um novo produto"
             placeholderTextColor={"#808080"}
-          ></TextInput>
-          <TouchableOpacity style={styles.button}>
+            keyboardType="default"
+            onChangeText={setProductName}
+            value={productName}
+          />
+          <TouchableOpacity style={styles.button} onPress={handleProductAdd}>
             <AntDesign name="pluscircleo" size={18} color="#fff" />
           </TouchableOpacity>
         </View>
         <View style={styles.infoContainer}>
           <View style={styles.productWrapper}>
             <Text style={styles.productText}>Produtos</Text>
-            <Text style={styles.productNumber}>0</Text>
+            <Text style={styles.productNumber}>{products.length}</Text>
           </View>
           <View style={styles.finishedWrapper}>
             <Text style={styles.finishedText}>Finalizados</Text>
-            <Text style={styles.finishedNumber}>0</Text>
+            <Text style={styles.finishedNumber}>
+              {products.filter((product) => product.done).length}
+            </Text>
           </View>
         </View>
         <FlatList
@@ -48,9 +89,9 @@ export const Home = () => {
           renderItem={({ item }) => (
             <ProductCard
               name={item.name}
-              done={false}
-              onRemove={() => console.log()}
-              onAdd={() => console.log()}
+              done={item.done}
+              onRemove={() => handleProductRemove(item.name)}
+              onDone={() => handleProductDone(item.name)}
             />
           )}
           ListEmptyComponent={

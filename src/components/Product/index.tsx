@@ -7,16 +7,16 @@ type Props = {
   name: string;
   done: boolean;
   onRemove: () => void;
-  onAdd: () => void;
+  onDone: () => void;
 };
 
-export const ProductCard = ({ name, done, onRemove, onAdd }: Props) => {
+export const ProductCard = ({ name, done, onDone, onRemove }: Props) => {
   return (
     <View
       style={{ ...styles.container, borderColor: done ? "#D9D9D9" : "#808080" }}
     >
       <View style={styles.wrapper}>
-        <TouchableOpacity onPress={onAdd}>
+        <TouchableOpacity onPress={onDone}>
           {done ? (
             <FontAwesome name="check-circle" size={24} color="#7A4A9E" />
           ) : (
