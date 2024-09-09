@@ -20,7 +20,7 @@ export const Home = () => {
 
   const handleProductAdd = () => {
     if (productName.trim() === "") {
-      alert("Por favor, insira um nome para o produto.");
+      Alert.alert("Por favor, insira um nome para o produto.");
       return;
     }
 
@@ -36,7 +36,7 @@ export const Home = () => {
       name: productName,
       done: false,
     };
-    setProducts([...products, newProduct]);
+    setProducts((prevProducts) => [...prevProducts, newProduct]);
     setProductName("");
   };
 
